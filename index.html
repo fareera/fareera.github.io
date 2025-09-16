@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上海-台州石塘3天2晚旅游规划</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=YOUR_AMAP_KEY"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 10px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #3b82f6;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 25px;
+            top: 25px;
+            width: 2px;
+            height: calc(100% - 25px);
+            background: #e5e7eb;
+        }
+        .map-container {
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .weather-icon {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">🌅 上海-台州石塘看日出之旅</h1>
+                <p class="text-xl opacity-90">3天2晚 · 2025年9月20日-22日 · 5人自驾</p>
+                <div class="mt-4 flex justify-center space-x-8 text-sm">
+                    <div class="flex items-center">
+                        <i class="fas fa-car mr-2"></i>
+                        <span>总距离: 430公里</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock mr-2"></i>
+                        <span>车程: 约5.5小时</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-users mr-2"></i>
+                        <span>5人(3男2女)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- 路线概览 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-route mr-3 text-blue-500"></i>路线总览
+                </h2>
+                <div id="map" class="map-container"></div>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">主要路线</h3>
+                        <p class="text-sm text-gray-600">上海 → G60沪昆高速 → G92杭州湾环线 → G15沈海高速 → G1523甬莞高速 → 石塘镇</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">主要景点</h3>
+                        <p class="text-sm text-gray-600">千年曙光园、石塘风车公路、金沙滩、玉环坎门渔港、临海古城</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-orange-800 mb-2">特色体验</h3>
+                        <p class="text-sm text-gray-600">海上日出、海鲜美食、渔村风情、古城文化</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 天气预报 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-cloud-sun mr-3 text-yellow-500"></i>天气预报
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="weather-container">
+                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-4 rounded-lg text-center">
+                        <div class="text-lg font-semibold">9月20日 (周六)</div>
+                        <div class="weather-icon mx-auto my-2">🌧️</div>
+                        <div class="text-2xl font-bold">34°C</div>
+                        <div class="text-sm opacity-90">小雨转晴 · 26°C~34°C</div>
+                        <div class="text-xs mt-1">南风1-3级</div>
+                    </div>
+                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-4 rounded-lg text-center">
+                        <div class="text-lg font-semibold">9月21日 (周日)</div>
+                        <div class="weather-icon mx-auto my-2">☀️</div>
+                        <div class="text-2xl font-bold">35°C</div>
+                        <div class="text-sm opacity-90">晴 · 27°C~35°C</div>
+                        <div class="text-xs mt-1">南风1-3级</div>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-400 to-blue-500 text-white p-4 rounded-lg text-center">
+                        <div class="text-lg font-semibold">9月22日 (周一)</div>
+                        <div class="weather-icon mx-auto my-2">🌤️</div>
+                        <div class="text-2xl font-bold">35°C</div>
+                        <div class="text-sm opacity-90">晴转多云 · 26°C~35°C</div>
+                        <div class="text-xs mt-1">南风1-3级</div>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-r-lg">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                        <span class="font-semibold text-yellow-800">看日出提醒</span>
+                    </div>
+                    <p class="text-sm text-yellow-700 mt-1">最佳日出时间: 5:30-6:00，建议5:00前到达千年曙光园观景台</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 详细行程 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-calendar-alt mr-3 text-green-500"></i>详细行程安排
+                </h2>
+                
+                <!-- Day 1 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-blue-600 border-b-2 border-blue-200 pb-2">
+                        Day 1 - 9月20日 (周六) 上海→石塘
+                    </h3>
+                    <div class="relative pl-10">
+                        <div class="timeline-line"></div>
+                        
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">07:00 上海出发</h4>
+                            <p class="text-gray-600 text-sm mb-2">从上海市区出发，车程约5.5小时，建议提前检查车况和油量</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="fas fa-road mr-1"></i>
+                                <span>路线: 上海 → G60沪昆高速 → G92杭州湾环线 → G15沈海高速 → G1523甬莞高速</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">10:30 服务区休息</h4>
+                            <p class="text-gray-600 text-sm">建议在杭州湾跨海大桥服务区休息，补充物资</p>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">12:30 到达石塘镇</h4>
+                            <p class="text-gray-600 text-sm mb-2">先办理入住手续，然后享用午餐</p>
+                            <div class="mt-3">
+                                <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-2">推荐住宿</span>
+                                <span class="text-sm">靠海民宿，能看日出，有免费停车</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">14:00 石塘小网海鲜楼午餐</h4>
+                            <p class="text-gray-600 text-sm mb-2">品尝当地新鲜海鲜，特色推荐小网海鲜</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span>地址: 中山路与冠鸣路交叉口北200米</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">15:30 金沙滩海滨漫步</h4>
+                            <p class="text-gray-600 text-sm mb-2">在金沙滩享受海风，适应海边环境，拍照留念</p>
+                            <div class="mt-3">
+                                <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs mr-2">特色体验</span>
+                                <span class="text-sm">踏浪、沙滩漫步、观景台拍照</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">18:00 海鲜大餐</h4>
+                            <p class="text-gray-600 text-sm">在55海鲜坊或海食界海鲜排档享用丰盛海鲜晚餐</p>
+                        </div>
+
+                        <div class="timeline-item relative bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">21:00 早休息</h4>
+                            <p class="text-gray-600 text-sm text-red-600">⚠️ 重要提醒：明天看日出需要5:00起床，建议早点休息</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-blue-600 border-b-2 border-blue-200 pb-2">
+                        Day 2 - 9月21日 (周日) 石塘日出→玉环坎门
+                    </h3>
+                    <div class="relative pl-10">
+                        <div class="timeline-line"></div>
+                        
+                        <div class="timeline-item relative mb-6 bg-orange-50 p-4 rounded-lg border-l-4 border-orange-400">
+                            <h4 class="font-semibold text-orange-800 mb-2">05:00 ⭐ 千年曙光园看日出</h4>
+                            <p class="text-gray-600 text-sm mb-2">🌅 中国大陆新千年第一缕阳光照射地，最佳观日出位置</p>
+                            <div class="mt-3 space-y-1">
+                                <div class="flex items-center text-xs text-gray-600">
+                                    <i class="fas fa-sun mr-1"></i>
+                                    <span>日出时间约5:50，建议5:00前到达观景台</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-600">
+                                    <i class="fas fa-camera mr-1"></i>
+                                    <span>最佳拍照点：千年曙光碑旁的观景台</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">07:30 元龙岙沙滩</h4>
+                            <p class="text-gray-600 text-sm">看完日出后在海边沙滩漫步，享受晨光</p>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">08:30 早餐</h4>
+                            <p class="text-gray-600 text-sm">在石塘镇享用当地特色早餐，海鲜面条或渔家粥</p>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">10:00 石塘风车公路</h4>
+                            <p class="text-gray-600 text-sm mb-2">驾车游览著名的石塘风车公路，海景与风车的完美结合</p>
+                            <div class="mt-3">
+                                <span class="inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs mr-2">网红打卡</span>
+                                <span class="text-sm">绝佳的自驾拍照路线</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">12:00 前往玉环坎门</h4>
+                            <p class="text-gray-600 text-sm mb-2">车程约40分钟，前往玉环坎门渔港</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="fas fa-route mr-1"></i>
+                                <span>距离约30公里，沿海岸线行驶风景优美</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">12:30 坎门中心渔港</h4>
+                            <p class="text-gray-600 text-sm mb-2">参观浙江最大的渔港之一，体验渔村文化</p>
+                            <div class="mt-3">
+                                <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-2">文化体验</span>
+                                <span class="text-sm">渔船、海鲜市场、渔民生活</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">14:00 大麦屿渔港海鲜午餐</h4>
+                            <p class="text-gray-600 text-sm">在渔港附近享用最新鲜的海鲜</p>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">15:30 东沙渔村</h4>
+                            <p class="text-gray-600 text-sm">游览古朴的渔村，体验原汁原味的海岛生活</p>
+                        </div>
+
+                        <div class="timeline-item relative bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">18:00 返回石塘住宿</h4>
+                            <p class="text-gray-600 text-sm">回到石塘镇休息，晚餐可尝试不同的海鲜餐厅</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 3 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-blue-600 border-b-2 border-blue-200 pb-2">
+                        Day 3 - 9月22日 (周一) 临海古城→返程上海
+                    </h3>
+                    <div class="relative pl-10">
+                        <div class="timeline-line"></div>
+                        
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">08:00 退房早餐</h4>
+                            <p class="text-gray-600 text-sm">办理退房手续，享用早餐</p>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">09:30 前往临海古城</h4>
+                            <p class="text-gray-600 text-sm mb-2">车程约1小时，游览历史悠久的临海古城</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="fas fa-map-marker-alt mr-1"></i>
+                                <span>距离约60公里</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">10:30 临海古城游览</h4>
+                            <p class="text-gray-600 text-sm mb-2">游览古城墙、紫阳街等历史文化景点</p>
+                            <div class="mt-3">
+                                <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs mr-2">历史文化</span>
+                                <span class="text-sm">江南保存最完好的古城墙</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">12:30 古城特色午餐</h4>
+                            <p class="text-gray-600 text-sm">品尝临海当地特色菜肴</p>
+                        </div>
+
+                        <div class="timeline-item relative mb-6 bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">14:00 开始返程</h4>
+                            <p class="text-gray-600 text-sm mb-2">返回上海，车程约5小时</p>
+                            <div class="flex items-center text-xs text-gray-500">
+                                <i class="fas fa-clock mr-1"></i>
+                                <span>预计19:00-20:00到达上海</span>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item relative bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">19:30 到达上海</h4>
+                            <p class="text-gray-600 text-sm">结束愉快的石塘看日出之旅</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 住宿推荐 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-bed mr-3 text-purple-500"></i>住宿推荐
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                        <h3 class="font-semibold text-lg mb-2">大海星空特色民宿</h3>
+                        <p class="text-gray-600 text-sm mb-3">上箬线石塘镇，靠近千年曙光园</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>能看海日出</span>
+                            </div>
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>免费停车</span>
+                            </div>
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>步行到观景台</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                        <h3 class="font-semibold text-lg mb-2">石塘果湾民宿</h3>
+                        <p class="text-gray-600 text-sm mb-3">石塘镇阳光花苑，地理位置优越</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>现代化设施</span>
+                            </div>
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>免费停车</span>
+                            </div>
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>靠近餐厅</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-lg p-4 hover:shadow-lg transition-shadow">
+                        <h3 class="font-semibold text-lg mb-2">山海民宿</h3>
+                        <p class="text-gray-600 text-sm mb-3">温岭石塘旅游景区店，海景房</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>海景房</span>
+                            </div>
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>可看日出</span>
+                            </div>
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check mr-2"></i>
+                                <span>停车便利</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 美食推荐 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-utensils mr-3 text-red-500"></i>海鲜美食推荐
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="border rounded-lg p-4">
+                        <h3 class="font-semibold text-lg mb-2 text-blue-600">石塘特色海鲜</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-medium">石塘小网海鲜楼</span>
+                                <span class="text-sm text-gray-500">中山路与冠鸣路交叉口</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-medium">小而真海鲜楼</span>
+                                <span class="text-sm text-gray-500">联合村福港路</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <span class="font-medium">海食界海鲜排档</span>
+                                <span class="text-sm text-gray-500">车关金沙滩浴场</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">55海鲜坊</span>
+                                <span class="text-sm text-gray-500">金沙滩东南侧</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border rounded-lg p-4">
+                        <h3 class="font-semibold text-lg mb-2 text-orange-600">必尝当季海鲜</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                <span>新鲜带鱼 (9月正当季)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                <span>梭子蟹 (肉质鲜美)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                <span>小黄鱼 (石塘特产)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                <span>海蛎子 (原汁原味)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-400 rounded-full mr-3"></span>
+                                <span>石塘海鲜面 (当地特色)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- B计划 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-umbrella mr-3 text-indigo-500"></i>恶劣天气B计划
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
+                        <h3 class="font-semibold text-yellow-800 mb-3">
+                            <i class="fas fa-cloud-rain mr-2"></i>下雨天替代方案
+                        </h3>
+                        <ul class="space-y-2 text-sm text-yellow-700">
+                            <li>• 大师奖博物馆 - 室内文化体验</li>
+                            <li>• 石塘镇传统建筑群游览</li>
+                            <li>• 海鲜市场体验当地生活</li>
+                            <li>• 温岭市区商业街购物</li>
+                            <li>• 民宿休息，享受慢节奏</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                        <h3 class="font-semibold text-blue-800 mb-3">
+                            <i class="fas fa-wind mr-2"></i>大风天替代方案
+                        </h3>
+                        <ul class="space-y-2 text-sm text-blue-700">
+                            <li>• 避免海边活动，改为内陆景点</li>
+                            <li>• 临海古城深度游</li>
+                            <li>• 温岭市区文化景点</li>
+                            <li>• 室内温泉度假村</li>
+                            <li>• 当地特色美食店铺探访</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <h4 class="font-semibold text-red-800 mb-2">
+                        <i class="fas fa-exclamation-circle mr-2"></i>安全提醒
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-red-700">
+                        <div>
+                            <strong>海边安全:</strong>
+                            <ul class="mt-1 space-y-1">
+                                <li>• 注意潮汐时间，避免涨潮时在礁石区活动</li>
+                                <li>• 大风天气不要靠近海边</li>
+                                <li>• 下雨天海边路滑，注意防滑</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong>自驾安全:</strong>
+                            <ul class="mt-1 space-y-1">
+                                <li>• 山区道路雨天谨慎驾驶</li>
+                                <li>• 关注天气预报和路况信息</li>
+                                <li>• 备用路线规划</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实用信息 -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">
+                    <i class="fas fa-info-circle mr-3 text-teal-500"></i>实用信息
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-lg mb-3 text-teal-600">出行准备</h3>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li>• 身份证、驾驶证、行驶证</li>
+                            <li>• 雨具、防晒用品</li>
+                            <li>• 相机、充电宝</li>
+                            <li>• 舒适的徒步鞋</li>
+                            <li>• 薄外套(海边早晚凉)</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg mb-3 text-orange-600">费用预算</h3>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li>• 油费: 约600元</li>
+                            <li>• 高速费: 约400元</li>
+                            <li>• 住宿: 400-800元/晚</li>
+                            <li>• 餐饮: 200-300元/人/天</li>
+                            <li>• 景点门票: 约100元/人</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-lg mb-3 text-purple-600">联系方式</h3>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li>• 石塘镇旅游咨询: 0576-8xxxxxx</li>
+                            <li>• 紧急救援: 110/120</li>
+                            <li>• 高速路况: 12122</li>
+                            <li>• 天气查询: 12121</li>
+                            <li>• 民宿预订: 提前1-2天</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="gradient-bg text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-lg font-semibold mb-2">🌅 祝您旅途愉快！</p>
+            <p class="text-sm opacity-80">记得在千年曙光园看第一缕阳光 ☀️</p>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化地图
+        function initMap() {
+            var map = new AMap.Map('map', {
+                zoom: 8,
+                center: [121.4, 29.2]
+            });
+
+            // 标记点
+            var startMarker = new AMap.Marker({
+                position: [121.473667, 31.230525],
+                title: '上海出发点'
+            });
+
+            var endMarker = new AMap.Marker({
+                position: [121.605635, 28.279311],
+                title: '石塘镇-千年曙光园'
+            });
+
+            var yuhuanMarker = new AMap.Marker({
+                position: [121.273444, 28.094876],
+                title: '玉环坎门渔港'
+            });
+
+            var linhaiMarker = new AMap.Marker({
+                position: [121.134588, 28.846615],
+                title: '临海古城'
+            });
+
+            map.add([startMarker, endMarker, yuhuanMarker, linhaiMarker]);
+
+            // 绘制路线
+            AMap.service(['AMap.Driving'], function() {
+                var driving = new AMap.Driving({
+                    map: map,
+                    panel: false
+                });
+                
+                driving.search([121.473667, 31.230525], [121.605635, 28.279311], function(status, result) {
+                    if (status === 'complete') {
+                        console.log('路线规划成功');
+                    }
+                });
+            });
+        }
+
+        // 页面加载完成后初始化地图
+        window.onload = function() {
+            // 检查是否有高德地图API
+            if (typeof AMap !== 'undefined') {
+                initMap();
+            } else {
+                document.getElementById('map').innerHTML = '<div class="flex items-center justify-center h-full bg-gray-100 text-gray-500"><i class="fas fa-map mr-2"></i>地图加载中...</div>';
+            }
+        };
+
+        // 天气点击事件
+        document.querySelectorAll('#weather-container > div').forEach(function(weatherCard) {
+            weatherCard.addEventListener('click', function() {
+                this.classList.toggle('transform');
+                this.classList.toggle('scale-105');
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
